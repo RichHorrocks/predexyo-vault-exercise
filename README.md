@@ -1,23 +1,35 @@
-## Foundry
+## Predexyo Vault Exercise
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A vault implementation providing the following functionality:
 
-Foundry consists of:
+- ETH deposits and withdrawals
+- ETH <-> WETH wrapping and unwrapping, via interactions with external WETH contract
+- ERC20 deposits and withdrawals
+- ETH, WETH, and ERC20 balance tracking
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+### Files
 
-## Documentation
+Project composition:
 
-https://book.getfoundry.sh/
+- `Vault.sol` - main vault implementation
+- `error/Errors.sol` - error library
+- `interfaces/IWETH.sol` - WETH interface
+- `test/mocks` - mocks of WETH and ERC20 contracts
+- `test/Vault.token.t.sol` - token-related tests
+- `test/Vault.wrap.t.sol` - ETH- and WETH-related tests
 
-## Usage
+## Instructions
+
+### Prerequisites
+
+This is a Foundry project, so requires Foundry to be installed.
+
+See: https://book.getfoundry.sh/getting-started/installation
 
 ### Build
 
 ```shell
+$ forge install
 $ forge build
 ```
 
@@ -27,40 +39,13 @@ $ forge build
 $ forge test
 ```
 
-### Format
+## Ideas for further improvement
 
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+- Security:
+  - Re-entrancy guards (e.g. OpenZeppelin `ReentrancyGuard`)
+  - Safer ERC20 calls, for better handling of tokens that aren't quite ERC20 compliant, such as USDT. (e.g. OpenZeppelin `SafeERC20`)
+  - Static analysis, using something like Slither or Mythril
+- Gas:
+  - Proper analysis of gas costs, using Foundry's Snapshot feature
+- Testing:
+  - Fuzz testing, using Foundry's fuzzers
