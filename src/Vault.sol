@@ -71,7 +71,9 @@ contract Vault {
 
         tokenBalances[msg.sender][_token] -= _amount;
         totalDeposits[_token] -= _amount;
-        IERC20(_token).transfer(msg.sender, _amount);
+        if (!IERC20(_token).transfer(msg.sender, _amount)) {
+            revert Errors.TokenTransferFailed(msg.sender, _token, _amount);
+        }
         emit WithdrawToken(msg.sender, _token, _amount);
     }
 
